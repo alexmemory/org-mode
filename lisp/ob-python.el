@@ -88,6 +88,8 @@ This function is called by `org-babel-execute-src-block'."
 	   params (org-babel-variable-assignments:python params)))
          (result (org-babel-python-evaluate
 		  session full-body result-type result-params preamble)))
+    ;; (message "obep:: full-body:: ::value %s" full-body)
+    ;; (message "obep:: result:: ::value %s" result)
     (org-babel-reassemble-table
      result
      (org-babel-pick-name (cdr (assq :colname-names params))
@@ -327,6 +329,9 @@ last statement in BODY, as elisp."
                    (insert org-babel-python-eoe-indicator)
                    (funcall send-wait)))
                (org-babel-eval-read-file tmp-file))))))
+    ;; (message "obpes:: result-type:: ::value %s" result-type)
+    ;; (message "obpes:: input-body:: ::value %s" input-body)
+    ;; (message "obpes:: results:: ::value %s" results)
     (unless (string= (substring org-babel-python-eoe-indicator 1 -1) results)
       (org-babel-result-cond result-params
 	results

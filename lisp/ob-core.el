@@ -706,6 +706,10 @@ block."
 				   (member "table" result-params))
 			       (not (listp r)))
 			  (list (list r))
+			;; (message "cmd:: ::value %s" cmd)
+			;; (message "body:: ::value %s" body)
+			;; (message "params:: ::value %s" params)
+			;; (message "r:: ::value %s" r)
 			r)))
 	      (let ((file (cdr (assq :file params))))
 		;; If non-empty result and :file then write to :file.
@@ -731,6 +735,7 @@ block."
 		(org-babel-insert-result
 		 result result-params info new-hash lang)))
 	    (run-hooks 'org-babel-after-execute-hook)
+	    ;; (message "result:: ::value %s" result)
 	    result)))))))
 
 (defun org-babel-expand-body:generic (body params &optional var-lines)
