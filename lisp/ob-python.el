@@ -88,8 +88,8 @@ This function is called by `org-babel-execute-src-block'."
 	   params (org-babel-variable-assignments:python params)))
          (result (org-babel-python-evaluate
 		  session full-body result-type result-params preamble)))
-    ;; (message "obep:: full-body:: ::value %s" full-body)
-    ;; (message "obep:: result:: ::value %s" result)
+    ;; (message "obep:: full-body:: ::value '%s'" full-body)
+    ;; (message "obep:: result:: ::value '%s'" result)
     (org-babel-reassemble-table
      result
      (org-babel-pick-name (cdr (assq :colname-names params))
@@ -310,13 +310,37 @@ last statement in BODY, as elisp."
              (mapconcat
               #'org-trim
               (butlast
-               (org-babel-comint-with-output
-                   (session org-babel-python-eoe-indicator t body)
-                 (funcall input-body body)
-                 (funcall send-wait) (funcall send-wait)
-                 (insert org-babel-python-eoe-indicator)
-                 (funcall send-wait))
-               2) "\n"))
+	       (let* ((comint-result
+		       (org-babel-comint-with-output
+			   (session org-babel-python-eoe-indicator t body)
+			 (funcall input-body body)
+			 (funcall send-wait) (funcall send-wait)
+			 (insert org-babel-python-eoe-indicator)
+			 (funcall send-wait))))
+		 (message "obpes:: eoe:: ::value '%s'" org-babel-python-eoe-indicator)
+		 (defvar scr comint-result)
+		 (message "obpes:: comint-result:: ::value '%s'" comint-result)
+		 (message "obpes:: comint-result:: ::len '%d'" (length comint-result))
+
+		 ;; As of May 2017, IPython 'classic' with readline
+		 ;; interface is unavailable, so try to fix.
+		 ;; comint-result
+		 (let* ((sep "Bazzz")	; Just a temporary separator
+		       (result-raw (first comint-result)) ; It isn't already split
+		       (result-clean (replace-regexp-in-string
+					  ".*: .*0m" sep result-raw)) ; Messy!
+		       (result-split (split-string result-clean sep))
+		       (result-trimmed (mapcar 'string-trim result-split))
+		       )
+		   result-trimmed)
+		 )
+               ;; 2
+               2
+	       ;; (let* ((butlastparam 0))
+	       ;; 	 (message "obpes:: butlastparam:: ::value '%d'" butlastparam)
+	       ;; 	 butlastparam
+	       ;; 	 )
+	       ) "\n"))
             (`value
              (let ((tmp-file (org-babel-temp-file "python-")))
                (org-babel-comint-with-output
@@ -329,9 +353,10 @@ last statement in BODY, as elisp."
                    (insert org-babel-python-eoe-indicator)
                    (funcall send-wait)))
                (org-babel-eval-read-file tmp-file))))))
-    ;; (message "obpes:: result-type:: ::value %s" result-type)
-    ;; (message "obpes:: input-body:: ::value %s" input-body)
-    ;; (message "obpes:: results:: ::value %s" results)
+    (message "obpes:: result-type:: ::value '%s'" result-type)
+    (message "obpes:: body:: ::value '%s'" body)
+    ;; (message "obpes:: input-body:: ::value '%s'" input-body)
+    (message "obpes:: results:: ::value '%s'" results)
     (unless (string= (substring org-babel-python-eoe-indicator 1 -1) results)
       (org-babel-result-cond result-params
 	results
