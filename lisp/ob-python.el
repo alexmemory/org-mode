@@ -317,10 +317,10 @@ last statement in BODY, as elisp."
 			 (funcall send-wait) (funcall send-wait)
 			 (insert org-babel-python-eoe-indicator)
 			 (funcall send-wait))))
-		 (message "obpes:: eoe:: ::value '%s'" org-babel-python-eoe-indicator)
+		 ;; (message "obpes:: eoe:: ::value '%s'" org-babel-python-eoe-indicator)
 		 (defvar scr comint-result)
-		 (message "obpes:: comint-result:: ::value '%s'" comint-result)
-		 (message "obpes:: comint-result:: ::len '%d'" (length comint-result))
+		 ;; (message "obpes:: comint-result:: ::value '%s'" comint-result)
+		 ;; (message "obpes:: comint-result:: ::len '%d'" (length comint-result))
 
 		 ;; As of May 2017, IPython 'classic' with readline
 		 ;; interface is unavailable, so try to fix.
@@ -353,10 +353,10 @@ last statement in BODY, as elisp."
                    (insert org-babel-python-eoe-indicator)
                    (funcall send-wait)))
                (org-babel-eval-read-file tmp-file))))))
-    (message "obpes:: result-type:: ::value '%s'" result-type)
-    (message "obpes:: body:: ::value '%s'" body)
+    ;; (message "obpes:: result-type:: ::value '%s'" result-type)
+    ;; (message "obpes:: body:: ::value '%s'" body)
     ;; (message "obpes:: input-body:: ::value '%s'" input-body)
-    (message "obpes:: results:: ::value '%s'" results)
+    ;; (message "obpes:: results:: ::value '%s'" results)
     (unless (string= (substring org-babel-python-eoe-indicator 1 -1) results)
       (org-babel-result-cond result-params
 	results
